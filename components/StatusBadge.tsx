@@ -3,31 +3,23 @@ import Image from "next/image";
 
 import { StatusIcon } from "@/constants";
 
-export const StatusBadge = ({ status }: { status: Status }) => {
+interface StatusBadgeProps {
+  type: "new" | "inProgress" | "completed";
+  children: React.ReactNode;
+}
+
+export const StatusBadge = ({ type, children }: StatusBadgeProps) => {
+  const statusStyles = {
+    new: "bg-blue-100 text-blue-700",
+    inProgress: "bg-yellow-100 text-yellow-700",
+    completed: "bg-green-100 text-green-700",
+  };
+
   return (
     <div
-      className={clsx("status-badge", {
-        "bg-green-600": status === "scheduled",
-        "bg-blue-600": status === "pending",
-        "bg-red-600": status === "cancelled",
-      })}
+      className={`${statusStyles[type]} inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium`}
     >
-      <Image
-        src={StatusIcon[status]}
-        alt="doctor"
-        width={24}
-        height={24}
-        className="h-fit w-3"
-      />
-      <p
-        className={clsx("text-12-semibold capitalize", {
-          "text-green-500": status === "scheduled",
-          "text-blue-500": status === "pending",
-          "text-red-500": status === "cancelled",
-        })}
-      >
-        {status}
-      </p>
+      {children}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { PatientForm } from "@/components/forms/PatientForm";
+import { PropertyInquiryForm } from "@/components/forms/PropertyInquiryForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
 
 const Home = ({ searchParams }: SearchParamProps) => {
@@ -14,31 +14,31 @@ const Home = ({ searchParams }: SearchParamProps) => {
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
           <Image
-            src="/assets/icons/logo-full.svg"
+            src="/assets/icons/7apartamentov-logo.svg"
             height={1000}
             width={1000}
-            alt="patient"
+            alt="7Apartamentov"
             className="mb-12 h-10 w-fit"
           />
 
-          <PatientForm />
+          <PropertyInquiryForm />
 
           <div className="text-14-regular mt-20 flex justify-between">
             <p className="justify-items-end text-dark-600 xl:text-left">
-              © 2024 CarePluse
+              © 2024 7Apartamentov
             </p>
             <Link href="/?admin=true" className="text-green-500">
-              Admin
+              Админ
             </Link>
           </div>
         </div>
       </section>
 
       <Image
-        src="/assets/images/onboarding-img.png"
+        src="/assets/images/moscow-realestate.jpg"
         height={1000}
         width={1000}
-        alt="patient"
+        alt="Moscow Real Estate"
         className="side-img max-w-[50%]"
       />
     </div>

@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "./ui/textarea";
 
 export enum FormFieldType {
@@ -25,6 +25,11 @@ export enum FormFieldType {
   DATE_PICKER = "datePicker",
   SELECT = "select",
   SKELETON = "skeleton",
+}
+
+interface Option {
+  value: string;
+  label: string;
 }
 
 interface CustomProps {
@@ -40,6 +45,7 @@ interface CustomProps {
   children?: React.ReactNode;
   renderSkeleton?: (field: any) => React.ReactNode;
   fieldType: FormFieldType;
+  options?: Option[];
 }
 
 const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
@@ -137,7 +143,11 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent className="shad-select-content">
-              {props.children}
+              {props.options?.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </FormControl>

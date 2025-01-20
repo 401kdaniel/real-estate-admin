@@ -79,3 +79,12 @@ export function encryptKey(passkey: string) {
 export function decryptKey(passkey: string) {
   return atob(passkey);
 }
+
+export const formatDate = (date: string) => {
+  const options: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  };
+  return new Date(date).toLocaleDateString("ru-RU", options);
+};
