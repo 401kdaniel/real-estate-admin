@@ -34,15 +34,16 @@ export const PasskeyModal = () => {
 
   useEffect(() => {
     const accessKey = encryptedKey && decryptKey(encryptedKey);
+    const adminPasskey = process.env.NEXT_PUBLIC_ADMIN_PASSKEY;
 
-    if (path)
-      if (accessKey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY!.toString()) {
-        setOpen(false);
-        router.push("/admin");
-      } else {
+    if (path === '/admin') {
+      if (!accessKey || !adminPasskey || accessKey !== adminPasskey.toString()) {
         setOpen(true);
+      } else {
+        setOpen(false);
       }
-  }, [encryptedKey]);
+    }
+  }, [encryptedKey, path]);
 
   const closeModal = () => {
     setOpen(false);
@@ -53,13 +54,13 @@ export const PasskeyModal = () => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
+    const adminPasskey = process.env.NEXT_PUBLIC_ADMIN_PASSKEY;
 
-    if (passkey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY) {
+    if (passkey === adminPasskey?.toString()) {
       const encryptedKey = encryptKey(passkey);
-
       localStorage.setItem("accessKey", encryptedKey);
-
       setOpen(false);
+      router.push("/admin");
     } else {
       setError("Invalid passkey. Please try again.");
     }

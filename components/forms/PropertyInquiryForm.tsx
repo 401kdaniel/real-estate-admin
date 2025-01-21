@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import emailjs from '@emailjs/browser';
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,8 +15,8 @@ import CustomFormField, { FormFieldType } from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
 
 export const PropertyInquiryForm = () => {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const form = useForm<z.infer<typeof PropertyInquiryValidation>>({
     resolver: zodResolver(PropertyInquiryValidation),
@@ -43,10 +43,11 @@ export const PropertyInquiryForm = () => {
         location: values.location,
       };
 
-      const newInquiry = await createInquiry(inquiry);
+      const response = await createInquiry(inquiry);
 
-      if (newInquiry) {
-        router.push(`/inquiries/${newInquiry.$id}/confirmation`);
+      if (response) {
+        setIsSuccess(true);
+        form.reset();
       }
     } catch (error) {
       console.log(error);
@@ -54,6 +55,26 @@ export const PropertyInquiryForm = () => {
 
     setIsLoading(false);
   };
+
+  if (isSuccess) {
+    return (
+      <div className="flex flex-col items-center justify-center space-y-4 text-center">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+          <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h2 className="text-2xl font-semibold">Спасибо за вашу заявку!</h2>
+        <p className="text-gray-600">Мы свяжемся с вами в ближайшее время.</p>
+        <button
+          onClick={() => setIsSuccess(false)}
+          className="mt-4 rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+        >
+          Отправить еще одну заявку
+        </button>
+      </div>
+    );
+  }
 
   return (
     <Form {...form}>

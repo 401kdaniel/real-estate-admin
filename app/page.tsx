@@ -2,21 +2,16 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PropertyInquiryForm } from "@/components/forms/PropertyInquiryForm";
-import { PasskeyModal } from "@/components/PasskeyModal";
 
-const Home = ({ searchParams }: SearchParamProps) => {
-  const isAdmin = searchParams?.admin === "true";
-
+const Home = () => {
   return (
     <div className="flex h-screen max-h-screen">
-      {isAdmin && <PasskeyModal />}
-
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
           <Image
             src="/assets/icons/7apartamentov-logo.svg"
-            height={1000}
-            width={1000}
+            height={32}
+            width={162}
             alt="7Apartamentov"
             className="mb-12 h-10 w-fit"
           />
@@ -27,7 +22,7 @@ const Home = ({ searchParams }: SearchParamProps) => {
             <p className="justify-items-end text-dark-600 xl:text-left">
               © 2024 7Apartamentov
             </p>
-            <Link href="/?admin=true" className="text-green-500">
+            <Link href="/admin" className="text-green-500">
               Админ
             </Link>
           </div>
@@ -35,7 +30,7 @@ const Home = ({ searchParams }: SearchParamProps) => {
       </section>
 
       <Image
-        src="/assets/images/moscow-realestate.jpg"
+        src="https://images.unsplash.com/photo-1513326738677-b964603b136d"
         height={1000}
         width={1000}
         alt="Moscow Real Estate"

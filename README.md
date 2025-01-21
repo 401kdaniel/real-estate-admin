@@ -34,9 +34,9 @@ npm install
 
 3. Создайте файл `.env.local` и добавьте необходимые переменные окружения:
 ```
-NEXT_PUBLIC_APPWRITE_PROJECT_ID=your-project-id
-NEXT_PUBLIC_DATABASE_ID=your-database-id
-NEXT_PUBLIC_INQUIRIES_COLLECTION_ID=your-collection-id
+NEXT_PUBLIC_APPWRITE_PROJECT_ID=678d924c003ba57898ad
+NEXT_PUBLIC_DATABASE_ID=678d92d40032d54bf403
+NEXT_PUBLIC_INQUIRIES_COLLECTION_ID=678d92ef001a8faeaad8
 ```
 
 4. Запустите проект в режиме разработки:

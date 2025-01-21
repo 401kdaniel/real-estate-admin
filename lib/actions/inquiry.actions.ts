@@ -1,5 +1,4 @@
-import { databases } from "@/lib/appwrite";
-import { ID, Query } from "appwrite";
+import emailjs from '@emailjs/browser';
 
 export const createInquiry = async (inquiry: {
   name: string;
@@ -10,55 +9,41 @@ export const createInquiry = async (inquiry: {
   location: string;
 }) => {
   try {
-    const newInquiry = await databases.createDocument(
-      process.env.NEXT_PUBLIC_DATABASE_ID!,
-      process.env.NEXT_PUBLIC_INQUIRIES_COLLECTION_ID!,
-      ID.unique(),
-      {
-        name: inquiry.name,
-        email: inquiry.email,
-        phone: inquiry.phone,
-        propertyType: inquiry.propertyType,
-        budget: inquiry.budget,
-        location: inquiry.location,
-        status: "new",
-        createdAt: new Date().toISOString(),
-      }
-    );
+    console.log("Sending inquiry:", inquiry);
 
-    return newInquiry;
-  } catch (error) {
-    console.error("Error creating inquiry:", error);
-    throw error;
-  }
-};
-
-export const getRecentInquiryList = async () => {
-  try {
-    const inquiries = await databases.listDocuments(
-      process.env.NEXT_PUBLIC_DATABASE_ID!,
-      process.env.NEXT_PUBLIC_INQUIRIES_COLLECTION_ID!,
-      [Query.orderDesc("createdAt")]
-    );
-
-    const newCount = inquiries.documents.filter(
-      (doc) => doc.status === "new"
-    ).length;
-    const inProgressCount = inquiries.documents.filter(
-      (doc) => doc.status === "inProgress"
-    ).length;
-    const completedCount = inquiries.documents.filter(
-      (doc) => doc.status === "completed"
-    ).length;
-
-    return {
-      documents: inquiries.documents,
-      newCount,
-      inProgressCount,
-      completedCount,
+    const templateParams = {
+      from_name: inquiry.name,
+      from_email: inquiry.email,
+      phone: inquiry.phone,
+      property_type: inquiry.propertyType,
+      budget: inquiry.budget,
+      location: inquiry.location,
+      message: `New property inquiry from ${inquiry.name}`,
     };
-  } catch (error) {
-    console.error("Error fetching inquiries:", error);
+
+    const response = await emailjs.send(
+      process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+      process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+      templateParams,
+      process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+    );
+
+    // Store in localStorage
+    const newInquiry = {
+      ...inquiry,
+      status: "new",
+      createdAt: new Date().toISOString(),
+    };
+
+    const storedInquiries = localStorage.getItem('inquiries');
+    const inquiries = storedInquiries ? JSON.parse(storedInquiries) : [];
+    inquiries.push(newInquiry);
+    localStorage.setItem('inquiries', JSON.stringify(inquiries));
+
+    console.log("Email sent successfully:", response);
+    return response;
+  } catch (error: any) {
+    console.error("Error sending inquiry:", error);
     throw error;
   }
 }; 
