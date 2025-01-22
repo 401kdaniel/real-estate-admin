@@ -15,7 +15,7 @@
 - React
 - TypeScript
 - Tailwind CSS
-- Appwrite
+- EmailJS
 - React Hook Form
 - Zod для валидации
 
